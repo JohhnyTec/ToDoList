@@ -1,6 +1,8 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
 const app = express();
+const PORT = 5000;
+const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.todoList('./todoList.db');
 
 app.use(express.json());
@@ -15,7 +17,7 @@ app.get('/data', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(PORT, () => {
+  console.log('Server is running on port '+ PORT);
 });
 

@@ -4,7 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
-
+ul{
+  list-style-type: none;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
