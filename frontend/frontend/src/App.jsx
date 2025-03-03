@@ -20,7 +20,7 @@ import './App.css'
       />
 
 
-      <button onClick={handleAddTask}>Hinzufügen</button>
+      <button onClick="">Hinzufügen</button>
 
     </div>
   )
