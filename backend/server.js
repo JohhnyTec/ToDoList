@@ -3,7 +3,12 @@ const cors = require('cors');
 const app = express();
 const PORT = 5000;
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.todoList('./todoList.db');
+const db = new sqlite3.Database('./todoList.db', (err) => {
+  if (err) {
+    console.error(err.message);
+  }
+  console.log('DatabaseConnection: 200');
+});
 
 app.use(express.json());
 
