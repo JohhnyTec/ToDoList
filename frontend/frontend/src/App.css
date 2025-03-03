@@ -5,7 +5,8 @@
   text-align: center;
 }
 ul{
-  list-style-type: none;
+  list-style-image: url('frontend\icons\Todo❌.png');
+  padding-left: 50px;
 }
 .logo {
   height: 6em;
@@ -20,20 +21,6 @@ ul{
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
 
 .card {
   padding: 2em;
