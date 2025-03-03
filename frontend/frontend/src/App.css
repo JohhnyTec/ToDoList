@@ -4,7 +4,7 @@
   padding: 2rem;
   text-align: center;
 }
-ul{
+#tasks{
   list-style-image: url('frontend\icons\Todo❌.png');
   padding-left: 50px;
 }
