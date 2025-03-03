@@ -1,0 +1,15 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend server functions",
+  "main": "server.js",
+  "scripts": {
+    "test": "check",
+    "start": "node server.js"
+  },
+  "author": "JaymentalEntertainment",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
