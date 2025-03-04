@@ -24,7 +24,7 @@ db.serialize(() => {
   });
 });
 
-app.get('/data/:list', (req, res) => {
+app.get('/data', (req, res) => {
   db.all('SELECT tasks FROM TaskList', [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });

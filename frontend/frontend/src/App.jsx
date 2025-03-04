@@ -37,8 +37,8 @@ function App() {
     <div>
       <h1>To-Do Liste</h1>
       <input id="userInput" type="text" placeholder="Neue Aufgabe hinzufügen" />
-      <button onClick="">Hinzufügen</button>
-      <ul id="tasks"><checkDatabase/></ul>
+      <button onClick={addTask}>Add</button>
+      <CheckDatabase/>
     </div>
   )
 }
