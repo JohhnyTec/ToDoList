@@ -3,6 +3,7 @@ const cors = require('cors');
 const app = express();
 const PORT = 5000;
 app.use(cors());
+app.use(express.json());
 
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('todoList.db', (err) => {
@@ -35,22 +36,26 @@ app.get('/data', (req, res) => {
   });
 });
 
-app.get('/add/:task', (reg,res)=>{
-  const task = reg.params.task;
+app.post('/add/:task', (reg,res)=>{
+  const task = reg.body.tasks;
   if(task){
     db.run(
       'INSERT INTO TaskList (tasks) VALUES (?)',
       [task],
       function (err) {
-        if(err){
-          return console.error(err.message);
+        if (err) {
+          return res.status(500).json({ error: err.message });
         }
+        db.get('SELECT * FROM TaskList WHERE id = ?', [this.lastID], (err, row) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+          res.json(row);
+        });
       }
-    )
-    res.json({message: "Mission cleared"});
-  }
-  else{
-    res.status(404).json({error: "Mission failed"})
+    );
+  } else{
+    res.status(400).json({error: "Mission failed"})
   }
 })
 
@@ -58,14 +63,34 @@ app.get('/done/:index', (req,res)=>{
   const index = parseInt(req.params.index)+1;
   console.log(index);
   if(index>=0){
-    db.run(
-      'UPDATE TaskList SET Done = 1 WHERE id = (?)',[index],
-      function(err){
+    db.get(
+      'SELECT Done FROM TaskList WHERE id = (?)',[index],
+      (err,row)=> {
         if(err){
-          return console.error(err.message)
+          return console.error(err.message);
         }
-      }
-    )
+        if (row){
+          if (row.Done==1){
+            db.run(
+              'UPDATE TaskList SET Done = 0 WHERE id = (?)',[index],
+              function(err){
+                if(err){
+                  return console.error(err.message)
+                }
+              }
+            )
+          } else {
+            db.run(
+              'UPDATE TaskList SET Done = 1 WHERE id = (?)',[index],
+              function(err){
+                if(err){
+                  return console.error(err.message)
+                }
+              }
+            )
+          }
+        }
+      })
     res.json({message: "Task is Done!"})
     console.log('Done');
   }
