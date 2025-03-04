@@ -15,7 +15,8 @@ const db = new sqlite3.Database('todoList.db', (err) => {
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS TaskList (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    tasks TEXT
+    tasks TEXT,
+    Done BOOLEAN DEFAULT FALSE
   )`, (err) => {
     if (err) {
       console.error(err.message);
@@ -25,7 +26,7 @@ db.serialize(() => {
 });
 
 app.get('/data', (req, res) => {
-  db.all('SELECT tasks FROM TaskList', [], (err, rows) => {
+  db.all('SELECT tasks,Done FROM TaskList', [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
       return;
@@ -50,6 +51,23 @@ app.get('/add/:task', (reg,res)=>{
   }
   else{
     res.status(404).json({error: "Mission failed"})
+  }
+})
+
+app.get('/done/:index', (req,res)=>{
+  const index = parseInt(req.params.index)+1;
+  console.log(index);
+  if(index>=0){
+    db.run(
+      'UPDATE TaskList SET Done = 1 WHERE id = (?)',[index],
+      function(err){
+        if(err){
+          return console.error(err.message)
+        }
+      }
+    )
+    res.json({message: "Task is Done!"})
+    console.log('Done');
   }
 })
 

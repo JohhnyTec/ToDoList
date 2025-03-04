@@ -18,7 +18,7 @@ function CheckDatabase(){
   return (
     <ul>
       {dbData.map((obj, index) => (
-        <li key={index}>{obj.tasks}</li>
+        <li key={index}>{obj.tasks} <div id={index} class={obj.Done ? "Done":"ToDo"} onClick={()=>doneTask(index)}></div> </li>
       ))}
     </ul>
   )
@@ -29,6 +29,11 @@ function addTask(){
   if(task!="") {
     fetch('http://localhost:5000/add/'+task);
   }
+  location.reload();
+}
+
+function doneTask(index){
+  fetch('http://localhost:5000/done/'+index);
   location.reload();
 }
 

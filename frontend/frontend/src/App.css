@@ -4,8 +4,23 @@
   padding: 2rem;
   text-align: center;
 }
-#tasks{
-  list-style-image: url('frontend\icons\Todo❌.png');
-  padding-left: 50px;
+ul{
+  list-style: none;
+  font-size: x-large;
 }
-
+.ToDo{
+  height: 1em;
+  width: 1em;
+  display: inline-flex;
+  cursor: pointer;
+  background-image: url(icons/Todo.png);
+  background-size: 25px;
+}
+.Done{
+  height: 1em;
+  width: 1em;
+  display: inline-flex;
+  cursor: pointer;
+  background-size: 25px;
+  background-image: url(icons/Erledigt.png);
+}
