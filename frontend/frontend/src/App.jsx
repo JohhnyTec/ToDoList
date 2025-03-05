@@ -27,18 +27,29 @@ function CheckDatabase({ dbData, setDbData }) {
 }
 
 function DoneTask({ obj, index, setDbData }) {
-  let doneTask = () => {
-    fetch('http://localhost:5000/done/' + index)
-      .then(() => {
+  let doneTask = async () => {
+    try{
+      const response = await fetch('http://localhost:5000/done/' + index, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({index: index}),
+      });
+      if (!response.ok){
+        throw new Error('HTTP Error! Status: '+response.status);
+      }
+      const data = await response.json();
+      if (data.done !== undefined){
         setDbData((prevData) => {
           const newData = [...prevData];
-          newData[index].Done = !newData[index].Done;
+          newData[index].Done = data.done;
           return newData;
         });
-      })
-      .catch((error) => {
+      };
+    } catch (error) {
         console.error('Fehler beim Aktualisieren der Aufgabe:', error);
-      });
+      };
   };
   return (
     <div
@@ -53,7 +64,7 @@ function AddTask({ setDbData }) {
   let addTask = () => {
     let task = document.getElementById('userInput').value;
     if (task !== '') {
-      fetch('http://localhost:5000/add/' + task, {
+      fetch('http://localhost:5000/add/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,6 +88,29 @@ function AddTask({ setDbData }) {
   );
 }
 
+function DeleteDatabase({setDbData}){
+  let deleteDb = async () => {
+      fetch('http://localhost:5000/del/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => {
+          response.json();
+          setDbData([]);
+        })
+        .catch((error) => {
+          console.error('Fehler beim Löschen der Aufgaben:', error);
+        });
+    };
+  return (
+    <>
+      <button onClick={deleteDb}>Delete All</button>
+    </>
+  )
+}
+
 function App() {
   const [dbData, setDbData] = useState([]);
 
@@ -87,6 +121,7 @@ function App() {
       <ChangeMode />
       <AddTask setDbData={setDbData}/>
       <CheckDatabase dbData={dbData} setDbData={setDbData} />
+      <DeleteDatabase setDbData={setDbData}/>
     </div>
   );
 }

@@ -36,7 +36,7 @@ app.get('/data', (req, res) => {
   });
 });
 
-app.post('/add/:task', (reg,res)=>{
+app.post('/add', (reg,res)=>{
   const task = reg.body.tasks;
   if(task){
     db.run(
@@ -59,42 +59,47 @@ app.post('/add/:task', (reg,res)=>{
   }
 })
 
-app.get('/done/:index', (req,res)=>{
-  const index = parseInt(req.params.index)+1;
-  console.log(index);
+app.post('/done/:index', (req,res)=>{
+  const index = parseInt(req.body.index)+1;
   if(index>=0){
-    db.get(
-      'SELECT Done FROM TaskList WHERE id = (?)',[index],
-      (err,row)=> {
+    db.get('SELECT Done FROM TaskList WHERE id = (?)',[index], (err,row)=> {
         if(err){
           return console.error(err.message);
         }
         if (row){
-          if (row.Done==1){
-            db.run(
-              'UPDATE TaskList SET Done = 0 WHERE id = (?)',[index],
-              function(err){
-                if(err){
-                  return console.error(err.message)
-                }
+          const newDoneValue = row.Done === 1 ? 0 : 1;
+            db.run('UPDATE TaskList SET Done = (?) WHERE id = (?)',[newDoneValue,index], function(err){
+              if(err){
+                return console.error(err.message)
               }
-            )
-          } else {
-            db.run(
-              'UPDATE TaskList SET Done = 1 WHERE id = (?)',[index],
-              function(err){
-                if(err){
-                  return console.error(err.message)
-                }
-              }
-            )
+              res.json({message: "Task is Done!",done: newDoneValue});
+            });
+        } else {
+          res.status(404).json({error: 'Task not found'});
           }
-        }
-      })
-    res.json({message: "Task is Done!"})
-    console.log('Done');
+    });
+  } else {
+    res.status(400).json({error: 'Index invalid'});
   }
-})
+});
+
+app.post('/del', (req,res)=>{
+  db.run('DROP TABLE TaskList')
+  db.serialize(() => {
+    db.run(`CREATE TABLE IF NOT EXISTS TaskList (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      tasks TEXT,
+      Done BOOLEAN DEFAULT FALSE
+    )`, (err) => {
+      if (err) {
+        console.error(err.message);
+      }
+    });
+  });
+  res.json({message: "Table deleted"})
+}
+
+)
 
 app.listen(PORT, () => {
   console.log('Server is running on port '+ PORT);
