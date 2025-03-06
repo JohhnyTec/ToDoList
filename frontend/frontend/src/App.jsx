@@ -84,7 +84,7 @@ function AddTask({ setDbData }) {
   };
   return (
     <>
-      <input ref={inputRef} id="userInput" type="text" placeholder="Neue Aufgabe hinzufügen" />
+      <input ref={inputRef} id="userInput" type="text" placeholder="Add new Task..." />
       <button onClick={addTask}>Add</button>
     </>
   );
@@ -118,7 +118,7 @@ function App() {
 
   return (
     <div>
-      <h1>To-Do Liste</h1>
+      <h1>Daily To-Do Liste</h1>
       <h2>Thememode</h2>
       <ChangeMode />
       <AddTask setDbData={setDbData}/>
