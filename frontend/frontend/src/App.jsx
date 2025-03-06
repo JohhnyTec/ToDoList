@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 function CheckDatabase({ dbData, setDbData }) {
@@ -61,8 +61,9 @@ function DoneTask({ obj, index, setDbData }) {
 }
 
 function AddTask({ setDbData }) {
+  const inputRef = useRef(null);
   let addTask = () => {
-    let task = document.getElementById('userInput').value;
+    let task = inputRef.current.value;
     if (task !== '') {
       fetch('http://localhost:5000/add/', {
         method: 'POST',
@@ -74,6 +75,7 @@ function AddTask({ setDbData }) {
         .then((response) => response.json())
         .then((newTask) => {
           setDbData((prevData) => [...prevData, newTask]);
+          inputRef.current.value = '';
         })
         .catch((error) => {
           console.error('Fehler beim Hinzufügen der Aufgabe:', error);
@@ -82,7 +84,7 @@ function AddTask({ setDbData }) {
   };
   return (
     <>
-      <input id="userInput" type="text" placeholder="Neue Aufgabe hinzufügen" />
+      <input ref={inputRef} id="userInput" type="text" placeholder="Neue Aufgabe hinzufügen" />
       <button onClick={addTask}>Add</button>
     </>
   );
