@@ -141,3 +141,13 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+#FunButton{
+  position: fixed;
+  height: 50px;
+  min-width: 100px;
+  background-color: turquoise;
+  color: black;
+  font-weight: bolder;
+  font-size: larger;
+}

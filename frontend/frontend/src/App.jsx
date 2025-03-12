@@ -63,7 +63,7 @@ function DoneTask({ obj, index, setDbData }) {
 function AddTask({ setDbData }) {
   const inputRef = useRef(null);
   let addTask = () => {
-    let task = inputRef.current.value;
+    let task = inputRef.current.value.trim();
     if (task !== '') {
       fetch('http://localhost:5000/add/', {
         method: 'POST',
@@ -123,9 +123,27 @@ function App() {
       <ChangeMode />
       <AddTask setDbData={setDbData}/>
       <CheckDatabase dbData={dbData} setDbData={setDbData} />
-      <DeleteDatabase setDbData={setDbData}/>
+      <DeleteDatabase setDbData={setDbData}/><br />
+      <FunButton />
     </div>
   );
+}
+
+function FunButton(){
+  const [pos,setPos] = useState([20,20]);
+  let FB = document.getElementById('FunButton');
+  function rePosition(){
+    let top = Math.round(Math.random() * (window.innerHeight - 50));
+    let left =Math.round(Math.random() * (window.innerWidth - 150));
+    setPos([top,left]);
+    FB.addEventListener('focus', function(event) {event.target.blur();});
+  }
+  const Style = {
+    top: pos[0] + 'px',
+    left: pos[1] + 'px',
+  }
+  console.log(pos);
+  return (<button id="FunButton" onMouseOver={rePosition} onFocus={rePosition} style={Style}>Catch Me!</button>);
 }
 
 function ChangeMode() {

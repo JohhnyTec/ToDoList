@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+restaurant_server(2).js
+restaurant_server.js
+restaurant.db
