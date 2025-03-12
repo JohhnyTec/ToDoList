@@ -27,7 +27,7 @@ db.serialize(() => {
 });
 
 app.get('/data', (req, res) => {
-  db.all('SELECT tasks,Done FROM TaskList', [], (err, rows) => {
+  db.all('SELECT id,tasks,Done FROM TaskList', [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
       return;
@@ -60,7 +60,7 @@ app.post('/add', (reg,res)=>{
 })
 
 app.post('/done/:index', (req,res)=>{
-  const index = parseInt(req.body.index)+1;
+  const index = parseInt(req.body.index);
   if(index>=0){
     db.get('SELECT Done FROM TaskList WHERE id = (?)',[index], (err,row)=> {
         if(err){
@@ -81,6 +81,16 @@ app.post('/done/:index', (req,res)=>{
   } else {
     res.status(400).json({error: 'Index invalid'});
   }
+});
+
+app.delete('/deletethis/:index', (req,res)=>{
+  const index = parseInt(req.params.index);
+  if(index>=0){
+    db.run('DELETE FROM TaskList WHERE id=(?)',[index], (err) =>{
+      if(err){return console.error(err.message)}
+      res.json({message: 'Task is deleted'})
+    })
+  } else {res.status(400).json({error: 'Index Not Found to delete'})}
 });
 
 app.post('/del', (req,res)=>{

@@ -18,7 +18,7 @@ function CheckDatabase({ dbData, setDbData }) {
   return (
     <ul>
       {dbData.map((obj, index) => (
-        <li key={index}>
+        <li key={obj.id} id={obj.id}>
           {obj.tasks} <DoneTask obj={obj} index={index} setDbData={setDbData} />
         </li>
       ))}
@@ -26,15 +26,15 @@ function CheckDatabase({ dbData, setDbData }) {
   );
 }
 
-function DoneTask({ obj, index, setDbData }) {
-  let doneTask = async () => {
+function DoneTask({ obj,index, setDbData }) {
+  const doneTask = async () => {
     try{
-      const response = await fetch('http://localhost:5000/done/' + index, {
+      const response = await fetch('http://localhost:5000/done/' + obj.id, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({index: index}),
+        body: JSON.stringify({index: obj.id}),
       });
       if (!response.ok){
         throw new Error('HTTP Error! Status: '+response.status);
@@ -51,12 +51,30 @@ function DoneTask({ obj, index, setDbData }) {
         console.error('Fehler beim Aktualisieren der Aufgabe:', error);
       };
   };
-  return (
-    <div
-      id={index}
-      className={obj.Done ? 'Done' : 'ToDo'}
-      onClick={doneTask}
-    ></div>
+
+  const DeleteThis = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/deletethis/${obj.id}`, {
+        method: 'DELETE',
+      });
+      console.log(index);
+      setDbData((prevData) => {
+        console.log(prevData);
+        const newData = prevData.filter((_,i) => i !== index);
+        console.log(newData);
+        return newData;
+      }
+
+      );
+    } catch (error){
+      console.error('Fehler beim Löschen der Aufgabe:', error);
+    }
+  }
+
+  return (<>
+    <div id={obj.id} className={obj.Done ? 'Done' : 'ToDo'} onClick={doneTask}></div>
+    <button onClick={DeleteThis}>🗑️</button>
+    </>
   );
 }
 
@@ -142,7 +160,6 @@ function FunButton(){
     top: pos[0] + 'px',
     left: pos[1] + 'px',
   }
-  console.log(pos);
   return (<button id="FunButton" onMouseOver={rePosition} onFocus={rePosition} style={Style}>Catch Me!</button>);
 }
 
