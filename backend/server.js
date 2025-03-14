@@ -107,9 +107,7 @@ app.post('/del', (req,res)=>{
     });
   });
   res.json({message: "Table deleted"})
-}
-
-)
+});
 
 app.listen(PORT, () => {
   console.log('Server is running on port '+ PORT);
