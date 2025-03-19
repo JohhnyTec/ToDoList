@@ -6,7 +6,7 @@ app.use(cors());
 app.use(express.json());
 
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('todoList.db', (err) => {
+const db = new sqlite3.Database('Database/todoList.db', (err) => {
   if (err) {
     console.error(err.message);
   }
@@ -112,4 +112,3 @@ app.post('/del', (req,res)=>{
 app.listen(PORT, () => {
   console.log('Server is running on port '+ PORT);
 });
-

@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "check",
-    "dev": "nodemon server-pg.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "author": "JaymentalEntertainment",
   "license": "ISC",
@@ -20,5 +21,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
-  }
+  },
+  "keywords": []
 }

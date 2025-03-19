@@ -1,0 +1,4 @@
+.env
+.gitignore
+server-pg.js
+node_modules

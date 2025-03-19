@@ -26,3 +26,4 @@ dist-ssr
 restaurant_server(2).js
 restaurant_server.js
 restaurant.db
+Dockerfile
