@@ -11,11 +11,22 @@ const pool = new Pool({
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
+    port: process.env.DB_PORT,
 })
 
 app.use(cors());
 app.use(bodyParser.json());
+
+function startDB(){
+  pool.query(
+    `CREATE TABLE IF NOT EXISTS "TaskList" (
+      id SERIAL PRIMARY KEY,
+      tasks TEXT,
+      "Done" BOOLEAN DEFAULT FALSE
+    )`
+  );
+}
+startDB();
 
 app.get('/data', async (req, res) => {
     const result = await pool.query('SELECT * FROM "TaskList"');
@@ -93,6 +104,6 @@ app.post('/del', async (req, res) => {
     }
   });
 
-app.listen(5000, "localhost", () => {
+app.listen(5000, "0.0.0.0", () => {
     console.log("Server is running on PORT:5000")
 });

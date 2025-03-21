@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "check",
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "nodemon server-pg.js",
+    "start": "node server-pg.js"
   },
   "author": "JaymentalEntertainment",
   "license": "ISC",
